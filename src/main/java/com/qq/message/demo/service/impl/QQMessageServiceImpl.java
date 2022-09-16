@@ -109,11 +109,11 @@ public class QQMessageServiceImpl implements QQMessageService {
 
             String params = JSON.toJSONString(openapiDO);
             String res = HttpClient.doPost(RequestConfig.tuling, params);
-            Object obj = JSON.parseObject(res, TulingOpenApiVO.class);
+            Object obj = JSON.parseObject(res, Object.class);
             TulingOpenApiVO vo = new TulingOpenApiVO();
 //            BeanUtils.copyProperties(obj, vo);
 //            vo.setIntent(obj);
-            System.out.println(vo);
+            System.out.println(obj);
         }
     }
 
