@@ -37,13 +37,9 @@ public class WebSocketConfig {
                 @Override
                 public void onMessage(String message) {
                     log.info(message);
-                    GroupMessage groupMessage = JSON.parseObject(message, GroupMessage.class);
-                    if (groupMessage.getGroup_id() == RequestConfig.GroupId) {
-                        String res = PinyinUtil.getPinyin(groupMessage.getMessage().toString(), "");
-                        if (res.indexOf("nanton") > -1) {
-                            qqMessageService.recallMessage(groupMessage.getMessage_id());
-                        }
-                    }
+                    qqMessageService.recallMessage(message);
+//                    qqMessageService.fireMessage(message);
+                    qqMessageService.tulingMessage(message);
                 }
 
                 @Override

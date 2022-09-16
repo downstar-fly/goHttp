@@ -2,7 +2,7 @@ package com.qq.message.demo.DO;
 
 public class ApiParams {
     String user_id;
-    String group_id;
+    int group_id;
     String message;
     boolean auto_escape;
     int message_id;
@@ -23,11 +23,11 @@ public class ApiParams {
         this.user_id = user_id;
     }
 
-    public String getGroup_id() {
+    public int getGroup_id() {
         return group_id;
     }
 
-    public void setGroup_id(String group_id) {
+    public void setGroup_id(int group_id) {
         this.group_id = group_id;
     }
 

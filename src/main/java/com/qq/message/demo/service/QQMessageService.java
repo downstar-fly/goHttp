@@ -6,5 +6,11 @@ import org.springframework.stereotype.Service;
 public interface QQMessageService {
     void sendMessgaeToUser(String user_id, String message);
 
-    void recallMessage(int message_id);
+    void recallMessage(String message);
+
+    void sendMessageToGroup(int group_id, String message);
+
+    void fireMessage(String message);
+
+    void tulingMessage(String message);
 }

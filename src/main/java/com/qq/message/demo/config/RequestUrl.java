@@ -15,9 +15,14 @@ public enum RequestUrl {
         public String getUri(ApiParams apiParams) {
             return RequestConfig.address + "/delete_msg?message_id=" + apiParams.getMessage_id();
         }
+    },
+
+    SendMessageToGroup {
+        @Override
+        public String getUri(ApiParams apiParams) {
+            return RequestConfig.address +  "/send_group_msg";
+        }
     };
-
-
 
 
     public abstract String getUri(ApiParams apiParams);
