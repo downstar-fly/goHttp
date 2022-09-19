@@ -7,11 +7,11 @@ public class GroupMessage extends BaseInfo {
 
     private int message_id;
 
-    private int user_id;
+    private Object user_id;
 
     private Object message;
 
-    private String raw_message;
+    private Object raw_message;
 
     private int font;
 
@@ -20,6 +20,16 @@ public class GroupMessage extends BaseInfo {
     private int group_id;
 
     private Object anonymous;
+
+    private int message_seq;
+
+    public int getMessage_seq() {
+        return message_seq;
+    }
+
+    public void setMessage_seq(int message_seq) {
+        this.message_seq = message_seq;
+    }
 
     public String getMessage_type() {
         return message_type;
@@ -45,11 +55,11 @@ public class GroupMessage extends BaseInfo {
         this.message_id = message_id;
     }
 
-    public int getUser_id() {
+    public Object getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(Object user_id) {
         this.user_id = user_id;
     }
 
@@ -61,11 +71,11 @@ public class GroupMessage extends BaseInfo {
         this.message = message;
     }
 
-    public String getRaw_message() {
+    public Object getRaw_message() {
         return raw_message;
     }
 
-    public void setRaw_message(String raw_message) {
+    public void setRaw_message(Object raw_message) {
         this.raw_message = raw_message;
     }
 

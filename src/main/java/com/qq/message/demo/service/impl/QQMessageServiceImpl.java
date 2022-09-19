@@ -1,24 +1,29 @@
 package com.qq.message.demo.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.qq.message.demo.DO.ApiParams;
 import com.qq.message.demo.config.RequestConfig;
 import com.qq.message.demo.config.RequestUrl;
 import com.qq.message.demo.entry.GroupMessage;
-import com.qq.message.demo.entry.PostJson;
 import com.qq.message.demo.entry.SendGroupMessage;
 import com.qq.message.demo.entry.User;
+import com.qq.message.demo.entry.answer.DO.QueryAnswerDO;
 import com.qq.message.demo.entry.tuling.DO.InputText;
 import com.qq.message.demo.entry.tuling.DO.Perception;
+import com.qq.message.demo.entry.tuling.DO.TulingOpenApiuImgDO;
 import com.qq.message.demo.entry.tuling.DO.TulingOpenapiDO;
 import com.qq.message.demo.entry.tuling.DO.UserInfo;
+import com.qq.message.demo.entry.tuling.VO.Intent;
+import com.qq.message.demo.entry.tuling.VO.Results;
 import com.qq.message.demo.entry.tuling.VO.TulingOpenApiVO;
 import com.qq.message.demo.service.QQMessageService;
 import com.qq.message.demo.utils.HttpClient;
 import com.qq.message.demo.utils.PinyinUtil;
-import org.springframework.beans.BeanUtils;
+import com.qq.message.demo.utils.TulingUtils;
+import java.util.Map;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +65,7 @@ public class QQMessageServiceImpl implements QQMessageService {
         sendGroupMessage.setMessage(message);
         sendGroupMessage.setAuto_escape(false);
         String url = RequestUrl.SendMessageToGroup.getUri(new ApiParams());
-        String res = HttpClient.doPost(url, JSON.toJSONString(sendGroupMessage));
+        String res = HttpClient.doPost(url, JSON.toJSONString(sendGroupMessage), false);
         System.out.println(res);
     }
 
@@ -88,34 +93,66 @@ public class QQMessageServiceImpl implements QQMessageService {
 
     @Override
     public void tulingMessage(String message) {
-        GroupMessage groupMessage = JSON.parseObject(message, GroupMessage.class);
+        GroupMessage groupMessage = TulingUtils.getMessage(message);
         String msg = groupMessage.getMessage().toString();
-
-        if (msg.indexOf(RequestConfig.atMe) > -1) {
+        if (msg.contains(RequestConfig.atMe)) {
+            String fireMsg = "";
             msg = msg.substring(22);
             TulingOpenapiDO openapiDO = new TulingOpenapiDO();
-            openapiDO.setReqType(0);
 
-            Perception perception = new Perception();
-            InputText inputText = new InputText();
-            inputText.setText(msg);
-            perception.setInputText(inputText);
-            openapiDO.setPerception(perception);
+            // msg.contains(RequestConfig.imgMsg)
+            if (msg.contains(RequestConfig.imgMsg)) {
+                tulingImgMessage(groupMessage.getGroup_id(), msg);
+            } else {
+                openapiDO.setReqType(0);
 
-            UserInfo userInfo = new UserInfo();
-            userInfo.setApiKey(RequestConfig.apiKey);
-            userInfo.setUserId(RequestConfig.userId);
-            openapiDO.setUserInfo(userInfo);
+                Perception perception = new Perception();
+                InputText inputText = new InputText();
+                inputText.setText(msg);
+                perception.setInputText(inputText);
+                openapiDO.setPerception(perception);
 
-            String params = JSON.toJSONString(openapiDO);
-            String res = HttpClient.doPost(RequestConfig.tuling, params);
-            Object obj = JSON.parseObject(res, Object.class);
-            TulingOpenApiVO vo = new TulingOpenApiVO();
-//            BeanUtils.copyProperties(obj, vo);
-//            vo.setIntent(obj);
-            System.out.println(obj);
+                UserInfo userInfo = new UserInfo();
+                userInfo.setApiKey(RequestConfig.apiKey);
+                userInfo.setUserId(RequestConfig.userId);
+                openapiDO.setUserInfo(userInfo);
+
+                // 将图灵的消息转换成go-http所需的消息格式
+                String params = JSON.toJSONString(openapiDO);
+                String res = HttpClient.doPost(RequestConfig.tuling, params, false);
+                Map<String, String> map = JSON.parseObject(res, Map.class);
+
+
+                TulingOpenApiVO vo = new TulingOpenApiVO();
+                List<Results> results = JSON.parseArray(JSON.toJSONString(map.get("results")), Results.class);
+                vo.setResults(results);
+                fireMsg = "[CQ:at,qq=" + groupMessage.getUser_id() + "]  " + vo.getResults().get(0).getValues().getText();
+            }
+
+            sendMessageToGroup(groupMessage.getGroup_id(), fireMsg);
         }
     }
 
+    @Override
+    public void tulingImgMessage(int group_id, String message) {
+        TulingOpenApiuImgDO imgDO = new TulingOpenApiuImgDO();
+        imgDO.setKey(RequestConfig.apiKey);
+        imgDO.setInfo(message);
+        String res = HttpClient.doPost(RequestConfig.tulingV1, JSON.toJSONString(imgDO), false);
 
+        GroupMessage groupMessage = JSON.parseObject(message, GroupMessage.class);
+//        groupMessage.getMessage()
+    }
+
+    @Override
+    public void queryAnswer(int group_id, String message) {
+        QueryAnswerDO answerDO = new QueryAnswerDO();
+        answerDO.setApp_key("8102b22a5e81e840176d9f381ec6f837");
+        GroupMessage groupMessage = TulingUtils.getMessage(message);
+        String msg = groupMessage.getMessage().toString();
+        if (msg.contains("CQ:image")) {
+            msg = msg.substring(msg.indexOf("url="), msg.length() - 2);
+            System.out.println(msg);
+        }
+    }
 }

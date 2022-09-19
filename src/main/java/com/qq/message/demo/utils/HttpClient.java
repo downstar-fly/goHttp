@@ -60,7 +60,7 @@ public class HttpClient {
         }
         return result;
     }
-    public static String doPost(String httpUrl, String param) {
+    public static String doPost(String httpUrl, String param, boolean isFromRequestProperty) {
         HttpURLConnection connection = null;
         InputStream is = null;
         OutputStream os = null;
@@ -68,6 +68,11 @@ public class HttpClient {
         String result = null;
         try {
             URL url = new URL(httpUrl);
+
+            String requestProperty = "application/json; charset=utf-8";
+            if (isFromRequestProperty) {
+                requestProperty = "application/x-www-form-urlencoded";
+            }
             // 通过远程url连接对象打开连接
             connection = (HttpURLConnection) url.openConnection();
             // 设置连接请求方式
@@ -81,7 +86,7 @@ public class HttpClient {
             // 默认值为：true，当前向远程服务读取数据时，设置为true，该参数可有可无
             connection.setDoInput(true);
             // 设置传入参数的格式:请求参数应该是 name1=value1&name2=value2 的形式。
-            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            connection.setRequestProperty("Content-Type", requestProperty);
             // 设置鉴权信息：Authorization: Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0
             connection.setRequestProperty("Authorization", "Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0");
             // 通过连接对象获取一个输出流

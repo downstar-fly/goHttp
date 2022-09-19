@@ -12,4 +12,10 @@ public class RequestConfig {
     public static String apiKey = "8e206627596e42dba8fcf299ff360e25";
 
     public static String userId = "779448";
+
+    public static String tulingV1 = "http://www.tuling123.com/openapi/api";
+
+    public static String imgMsg = "的图片";
+
+    public static String xueersi = "http://openapiai.xueersi.com/v1/api/img/ocr/photo_search";
 }

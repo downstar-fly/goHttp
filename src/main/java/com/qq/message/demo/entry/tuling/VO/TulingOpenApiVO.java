@@ -1,5 +1,7 @@
 package com.qq.message.demo.entry.tuling.VO;
 
+import java.util.List;
+
 public class TulingOpenApiVO {
     Object emotion;
 
@@ -23,7 +25,7 @@ public class TulingOpenApiVO {
 
     Intent intent;
 
-    Results results;
+    List<Results> results;
 
     public Intent getIntent() {
         return intent;
@@ -33,11 +35,11 @@ public class TulingOpenApiVO {
         this.intent = intent;
     }
 
-    public Results getResults() {
+    public List<Results> getResults() {
         return results;
     }
 
-    public void setResults(Results results) {
+    public void setResults(List<Results> results) {
         this.results = results;
     }
 }

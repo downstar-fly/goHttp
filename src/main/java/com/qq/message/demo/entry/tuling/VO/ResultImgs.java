@@ -3,10 +3,10 @@ package com.qq.message.demo.entry.tuling.VO;
 import com.qq.message.demo.entry.tuling.DO.InputImage;
 import com.qq.message.demo.entry.tuling.DO.InputText;
 
-public class Results {
+public class ResultImgs {
     String resultType;
 
-    InputText values;
+    InputImage values;
 
     int groupType;
 
@@ -18,11 +18,11 @@ public class Results {
         this.resultType = resultType;
     }
 
-    public InputText getValues() {
+    public InputImage getValues() {
         return values;
     }
 
-    public void setValues(InputText values) {
+    public void setValues(InputImage values) {
         this.values = values;
     }
 

@@ -37,7 +37,7 @@ public class WebSocketConfig {
                 @Override
                 public void onMessage(String message) {
                     log.info(message);
-                    qqMessageService.recallMessage(message);
+//                    qqMessageService.recallMessage(message);
 //                    qqMessageService.fireMessage(message);
                     qqMessageService.tulingMessage(message);
                 }

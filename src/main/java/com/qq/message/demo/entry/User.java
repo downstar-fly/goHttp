@@ -2,7 +2,7 @@ package com.qq.message.demo.entry;
 
 public class User {
 
-    private int user_id;
+    private Object user_id;
     private String nickname;
     private String sex;
     private int age;
@@ -12,11 +12,11 @@ public class User {
     private String role;
     private String title;
 
-    public int getUser_id() {
+    public Object getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(Object user_id) {
         this.user_id = user_id;
     }
 

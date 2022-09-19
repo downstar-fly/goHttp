@@ -2,7 +2,7 @@ server:
   port: 8082
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/hang_talk?allowMultiQueries=true&autoReconnect=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/go_http?allowMultiQueries=true&autoReconnect=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
